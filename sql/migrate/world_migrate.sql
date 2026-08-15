@@ -133,3 +133,4 @@ DELETE FROM `achievement_criteria_data` WHERE `criteria_id` = 6320  AND `type` =
 DELETE FROM `achievement_criteria_data` WHERE `criteria_id` = 9124  AND `type` = 2 AND `value1` = 0  AND `value2` = 10;
 DELETE FROM `achievement_criteria_data` WHERE `criteria_id` = 9143  AND `type` = 2 AND `value1` = 0  AND `value2` = 11;
 DELETE FROM `achievement_criteria_data` WHERE `criteria_id` = 11163 AND `type` = 2 AND `value1` = 4  AND `value2` = 10;
+DELETE FROM `achievement_dbc` WHERE `ID` IN (3478, 3556, 3557, 3558, 3559, 3576, 3577, 3578, 3579, 3580, 3581, 3582, 3596, 3597, 3656);

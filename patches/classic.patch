@@ -106,7 +106,7 @@ index 7918cec..eecca19 100644
 +# Modules
 +if(BUILD_MODULES)
 +  message(STATUS "Build Modules         : Yes")
-+  
++
 +  foreach(MODULE_NAME ${MODULE_NAMES})
 +    if(NOT ${MODULE_NAME} STREQUAL "MODULES")
 +      string(TOLOWER ${MODULE_NAME} LOWER_MODULE_NAME)
@@ -117,7 +117,7 @@ index 7918cec..eecca19 100644
 +      endif()
 +	endif()
 +  endforeach()
-+  
++
 +else()
 +  message(STATUS "Build Modules         : No  (default)")
 +endif()
@@ -142,7 +142,7 @@ index ddde74c..2ad2666 100644
 +  foreach(INDEX RANGE ${MODULE_COUNT})
 +    list(GET MODULE_NAMES ${INDEX} MODULE_NAME)
 +    list(GET MODULE_URLS ${INDEX} MODULE_URL)
-+  
++
 +    string(TOLOWER ${MODULE_NAME} LOWER_MODULE_NAME)
 +    if(BUILD_MODULE_${MODULE_NAME} OR BUILD_${MODULE_NAME})
 +      include(FetchContent)
@@ -160,7 +160,7 @@ index ddde74c..2ad2666 100644
 +        FetchContent_Populate(${LOWER_MODULE_NAME})
 +        message(STATUS "${LOWER_MODULE_NAME} module fetched and populated in ${CMAKE_CURRENT_SOURCE_DIR}/modules/${LOWER_MODULE_NAME}")
 +      endif()
-+	
++
 +      add_subdirectory(${CMAKE_SOURCE_DIR}/src/modules/${LOWER_MODULE_NAME})
 +    else()
 +      if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/modules/${LOWER_MODULE_NAME})
@@ -257,7 +257,7 @@ index dd33749..6094b9e 100644
 +    sModuleMgr.OnEndBattleGround(this, winner);
 +#endif
  }
-
+ 
  /**
 @@ -1153,6 +1161,10 @@ void BattleGround::RemovePlayerAtLeave(ObjectGuid playerGuid, bool isOnTransport
              player->TeleportToBGEntryPoint();
@@ -450,7 +450,7 @@ index 47be88b..71cf103 100644
 +      add_dependencies(${LIBRARY_NAME} ${FOLDER_NAME})
 +    endif()
 +  endforeach()
-+  
++
 +  include_directories(${CMAKE_SOURCE_DIR}/src/modules/modules/src)
 +  target_link_libraries(${LIBRARY_NAME} PUBLIC modules)
 +  add_dependencies(${LIBRARY_NAME} modules)
@@ -659,9 +659,7 @@ index 2b9148e..d5aea89 100644
  }
  
  void WorldSession::HandleBuybackItem(WorldPacket& recv_data)
-@@ -625,6 +633,10 @@ void WorldSession::HandleBuybackItem(WorldPacket& recv_data)
-             _player->RemoveItemFromBuyBackSlot(slot, false);
-             _player->ItemAddedQuestCheck(pItem->GetEntry(), pItem->GetCount());
+@@ -625,4 +633,8 @@ void WorldSession::HandleBuybackItem(WorldPacket& recv_data)
              _player->StoreItem(dest, pItem, true);
 +
 +#ifdef ENABLE_MODULES
@@ -669,7 +667,7 @@ index 2b9148e..d5aea89 100644
 +#endif
          }
          else
-             _player->SendEquipError(msg, pItem, nullptr);
+             _player->SendEquipError(msg, pItem, nullptr, bagSlot);
 @@ -918,6 +930,10 @@ void WorldSession::HandleBuyBankSlotOpcode(WorldPacket& recvPacket)
  
      data << uint32(ERR_BANKSLOT_OK);
@@ -1850,10 +1848,7 @@ index 4dae1a3..ced24ae 100644
  void WorldSession::HandleUseItemOpcode(WorldPacket& recvPacket)
  {
      uint8 bagIndex, slot;
-@@ -145,6 +149,11 @@ void WorldSession::HandleUseItemOpcode(WorldPacket& recvPacket)
- 
-     _player->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_ITEM_USE);
- 
+@@ -145,3 +149,8 @@ void WorldSession::HandleUseItemOpcode(WorldPacket& recvPacket)
 +#ifdef ENABLE_MODULES
 +    if (sModuleMgr.OnUseItem(pUser, pItem))
 +        return;
